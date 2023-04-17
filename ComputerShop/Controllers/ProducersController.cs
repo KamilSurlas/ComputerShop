@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ComputerShop.Data;
 using ComputerShop.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace ComputerShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProducersController : Controller
     {
         private readonly ApplicationDbContext _context;
