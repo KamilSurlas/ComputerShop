@@ -9,10 +9,11 @@ using ComputerShop.Data;
 using ComputerShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using ComputerShop.Data.SD;
 
 namespace ComputerShop.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = SD.Role_User_Admin)]
     public class ProducersController : Controller
     {
         private readonly ApplicationDbContext _context;

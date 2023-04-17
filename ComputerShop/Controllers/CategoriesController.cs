@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using ComputerShop.Data;
 using ComputerShop.Models;
 using Microsoft.AspNetCore.Authorization;
+using ComputerShop.Data.SD;
 
 namespace ComputerShop.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = SD.Role_User_Admin)]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
