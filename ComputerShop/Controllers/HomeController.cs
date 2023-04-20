@@ -1,5 +1,6 @@
 ﻿using ComputerShop.Data;
 using ComputerShop.Models;
+using ComputerShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -19,10 +20,17 @@ namespace ComputerShop.Controllers
 
 		public IActionResult Index()
 		{
-			// do naprawienia (spytania w poniedziałek/wtorek)
-			var categoryGroupsList = from category in _data.Categories join categoryGroup in _data.CategoryGroups on category.CategoryGroupId equals categoryGroup.Id
-									 select new { CategoryName = category.Name, CategoryGroupName = categoryGroup.Name };
-			return View(categoryGroupsList);
+			List<HomeViewModel> model = new List<HomeViewModel>();
+			foreach (var item in _data.CategoryGroups)
+			{
+				model.Add(new HomeViewModel
+				{
+					CategoryGroup = item,
+					Categories = _data.Categories.Where(x => x.CategoryGroupId == item.Id)
+				});
+			}
+
+			return View(model);
 		}
 
 		public IActionResult Privacy()
