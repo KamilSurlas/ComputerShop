@@ -17,7 +17,8 @@ namespace ComputerShop.Data
 		public DbSet<OrderDetail> OrderDetails { get; set; }
 		public DbSet<Status> Statuses { get; set; }
 		public DbSet<ApplicationUser> Users { get; set; }
-
+		public DbSet<CategoryGroup> CategoryGroups { get; set; }
+		
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

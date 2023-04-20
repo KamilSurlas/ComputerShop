@@ -7,12 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ComputerShop.Data;
 using ComputerShop.Models;
-using Microsoft.AspNetCore.Authorization;
-using ComputerShop.Data.SD;
 
 namespace ComputerShop.Controllers
 {
-    [Authorize(Roles = SD.Role_User_Admin)]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,9 +22,8 @@ namespace ComputerShop.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
+            var applicationDbContext = _context.Categories.Include(c => c.CategoryGroup);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -39,6 +35,7 @@ namespace ComputerShop.Controllers
             }
 
             var category = await _context.Categories
+                .Include(c => c.CategoryGroup)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -51,6 +48,7 @@ namespace ComputerShop.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
+            ViewData["CategoryGroupId"] = new SelectList(_context.CategoryGroups, "Id", "Name");
             return View();
         }
 
@@ -59,7 +57,7 @@ namespace ComputerShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,CategoryGroupId")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -67,6 +65,7 @@ namespace ComputerShop.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryGroupId"] = new SelectList(_context.CategoryGroups, "Id", "Name", category.CategoryGroupId);
             return View(category);
         }
 
@@ -83,6 +82,7 @@ namespace ComputerShop.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryGroupId"] = new SelectList(_context.CategoryGroups, "Id", "Name", category.CategoryGroupId);
             return View(category);
         }
 
@@ -91,7 +91,7 @@ namespace ComputerShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryGroupId")] Category category)
         {
             if (id != category.Id)
             {
@@ -118,6 +118,7 @@ namespace ComputerShop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryGroupId"] = new SelectList(_context.CategoryGroups, "Id", "Name", category.CategoryGroupId);
             return View(category);
         }
 
@@ -130,6 +131,7 @@ namespace ComputerShop.Controllers
             }
 
             var category = await _context.Categories
+                .Include(c => c.CategoryGroup)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
