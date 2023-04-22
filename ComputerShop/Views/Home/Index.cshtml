@@ -4,26 +4,6 @@
 }
 
 <div class="text-center">
-	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-		<div class="container-fluid">
-			<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-				<ul class="navbar-nav flex-grow-1">
-					@foreach (var groups in @Model)
-					{
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@groups.CategoryGroup.Name</a>
-							<div class="dropdown-menu">
-								@foreach (var category in groups.Categories)
-								{
-									<a class="dropdown-item">@category.Name</a>
-								}
-							</div>
-						</li>
-					}
-				</ul>
-			</div>
-		</div>
-	</nav>
-
+	<p>Home</p>
 
 </div>
