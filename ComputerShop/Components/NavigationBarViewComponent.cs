@@ -15,10 +15,10 @@ namespace ComputerShop.Components
 
         public IViewComponentResult Invoke()
         {
-            List<HomeViewModel> model = new List<HomeViewModel>();
+            List<NavigationBarViewModel> model = new List<NavigationBarViewModel>();
             foreach (var item in _context.CategoryGroups)
             {
-                model.Add(new HomeViewModel
+                model.Add(new NavigationBarViewModel
                 {
                     CategoryGroup = item,
                     Categories = _context.Categories.Where(x => x.CategoryGroupId == item.Id)
