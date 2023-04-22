@@ -2,17 +2,18 @@
 using ComputerShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ComputerShop.Controllers
+
+namespace ComputerShop.Components
 {
-    public class NavigationBarController : Controller
+    public class NavigationBarViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
-        public NavigationBarController(ApplicationDbContext context)
+        public NavigationBarViewComponent(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult Index()
+        public IViewComponentResult Invoke()
         {
             List<HomeViewModel> model = new List<HomeViewModel>();
             foreach (var item in _context.CategoryGroups)
@@ -23,8 +24,7 @@ namespace ComputerShop.Controllers
                     Categories = _context.Categories.Where(x => x.CategoryGroupId == item.Id)
                 });
             }
-
-            return PartialView("_NavigationBarPartial", model);
+            return View("_NavCategoryBar",model);
         }
     }
 }

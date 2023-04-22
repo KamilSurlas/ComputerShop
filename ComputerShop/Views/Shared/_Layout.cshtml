@@ -45,12 +45,13 @@
             <partial name="_LoginPartial" />
         </nav>
 
-        <partial name="_NavigationBarPartial" />
+
+		<vc:navigation-bar>
+		</vc:navigation-bar>
 
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <p>Kastomowy layout</p>
             @RenderBody()
         </main>
     </div>
@@ -66,3 +67,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
