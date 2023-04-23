@@ -11,7 +11,7 @@
 						<div class="dropdown-menu">
 							@foreach (var category in groups.Categories)
 							{
-								<a class="dropdown-item">@category.Name</a>
+								<a class="dropdown-item" asp-route-dataId="@category.Id" asp-controller="Overview" asp-action="Index">@category.Name</a>
 							}
 						</div>
 					</li>
