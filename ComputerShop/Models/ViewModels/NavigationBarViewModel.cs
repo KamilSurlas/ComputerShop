@@ -3,6 +3,6 @@
     public class NavigationBarViewModel
     {
         public CategoryGroup CategoryGroup { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<Category> Categories { get; set; }    
     }
 }

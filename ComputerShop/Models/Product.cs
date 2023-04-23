@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,11 +18,11 @@ namespace ComputerShop.Models
 		public int ProducerId { get; set; }
 		[ForeignKey("ProducerId")]
 		[ValidateNever]
-		public Producer Producer { get; set; }
+		public Producer Producer { get; set; } 
 
 		public int CategoryId { get; set; }
 		[ForeignKey("CategoryId")]
 		[ValidateNever]
 		public Category Category { get; set; }
-	}
+    }
 }

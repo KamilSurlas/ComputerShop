@@ -1,10 +1,14 @@
-﻿@model IEnumerable<Product>
+﻿@model OverviewPageViewModel
 @{
     ViewData["Title"] = "Index";
 }
-@foreach (var item in Model)
+@foreach (var item in Model.PromotedProducts)
 {
-    <p>@item.Name</p>
+    <a asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">@item.Name</a>
+}
+@foreach (var item in Model.Products)
+{
+    <a asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">@item.Name</a>
 }
 
 

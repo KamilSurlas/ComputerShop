@@ -1,5 +1,7 @@
 ﻿using ComputerShop.Data;
+using ComputerShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace ComputerShop.Controllers
@@ -13,8 +15,19 @@ namespace ComputerShop.Controllers
         }
         public IActionResult Index(int dataId)
         {
-            var productsToShow = _context.Products.Where(x => x.CategoryId == dataId).ToList();
-            return View(productsToShow);
+            OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
+            var productsToShow = _context.Products.Include(x=>x.Producer).Where(x => x.CategoryId == dataId).ToList();
+            foreach (var item in productsToShow)
+            {
+                if(item.Producer.IsPromoted == true)
+                {
+                    overviewPageViewModel.PromotedProducts.Add(item);
+                } else
+                {
+                    overviewPageViewModel.Products.Add(item);
+                }
+            }
+            return View(overviewPageViewModel);
         }
     }
 }
