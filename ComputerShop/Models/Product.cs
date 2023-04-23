@@ -14,13 +14,13 @@ namespace ComputerShop.Models
 		public double Price { get; set; }
 		public int Amount { get; set; }
 
-
-		public int ProducerId { get; set; }
+        [Display(Name = "Producer")]
+        public int ProducerId { get; set; }
 		[ForeignKey("ProducerId")]
 		[ValidateNever]
-		public Producer Producer { get; set; } 
-
-		public int CategoryId { get; set; }
+		public Producer Producer { get; set; }
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
 		[ForeignKey("CategoryId")]
 		[ValidateNever]
 		public Category Category { get; set; }
