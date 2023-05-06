@@ -2,13 +2,39 @@
 @{
     ViewData["Title"] = "Index";
 }
-@foreach (var item in Model.PromotedProducts)
-{
-    <a asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">@item.Name</a>
-}
-@foreach (var item in Model.Products)
-{
-    <a asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">@item.Name</a>
-}
+<style>
+    .product h4 {
+        text-align:center;
+    }
+
+    .product h5 {
+        text-align: center;
+    }
+</style>
+
+<div class="cointainer">
+    <div class="row">
+        @foreach (var item in Model.PromotedProducts)
+        {
+            <a class="col-sm-6 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+                <div class="product">
+                    <img src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-medium,,2022/3/pr_2022_3_2_11_7_22_30_00.jpg" alt="HP Pavilion 15 Ryzen 5-5625U/16GB/512/Win11 - 1075108 - zdjęcie">
+                    <h4>@item.Name</h4>
+                    <h5>Cena: @item.Price zł</h5>
+                </div>
+            </a>
+        }
+        @foreach (var item in Model.Products)
+        {
+            <a class="col-sm-6 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+                <div class="product">
+                    <img src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-medium,,2022/3/pr_2022_3_2_11_7_22_30_00.jpg" alt="HP Pavilion 15 Ryzen 5-5625U/16GB/512/Win11 - 1075108 - zdjęcie">
+                    <h4>@item.Name</h4>
+                    <h5>Cena: @item.Price zł</h5>
+                </div>
+            </a>
+        }
+    </div>
+</div>
 
 
