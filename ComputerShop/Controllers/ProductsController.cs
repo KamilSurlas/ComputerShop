@@ -10,6 +10,7 @@ using ComputerShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using ComputerShop.Data.SD;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ComputerShop.Controllers
 {
@@ -17,10 +18,12 @@ namespace ComputerShop.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context,IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Products
@@ -63,10 +66,17 @@ namespace ComputerShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Amount,ProducerId,CategoryId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Amount,ProducerId,CategoryId,CoverImage")] Product product)
         {
             if (ModelState.IsValid)
             {
+                if(product.CoverImage != null)
+                {
+                    string coverImagePath = "products/cover/" + Guid.NewGuid().ToString() + product.CoverImage.FileName;
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, coverImagePath);
+                    product.CoverImage.CopyTo(new FileStream(imagePath, FileMode.Create));
+                    product.CoverImageUrl = "/"+coverImagePath;
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

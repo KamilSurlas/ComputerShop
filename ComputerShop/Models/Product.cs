@@ -24,5 +24,9 @@ namespace ComputerShop.Models
 		[ForeignKey("CategoryId")]
 		[ValidateNever]
 		public Category Category { get; set; }
+        [Display(Name = "Cover image")]
+		[NotMapped]
+        public IFormFile CoverImage { get; set; }
+        public string? CoverImageUrl { get; set; }
     }
 }
