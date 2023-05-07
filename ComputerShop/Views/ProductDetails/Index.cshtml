@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <style>
     .col-md-7 h2 {
         color: #555;
@@ -37,15 +36,12 @@
         <div class="col-md-5">
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2021/11/pr_2021_11_12_11_6_54_78_00.jpg" class="d-block w-100" alt="1">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2021/3/pr_2021_3_22_7_35_27_266_00.jpg" class="d-block w-100" alt="2">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2021/11/pr_2021_11_12_11_6_57_671_02.jpg" class="d-block w-100" alt="3">
-                    </div>
+                    @for (int i = 0; i < Model.ImagesUrls.Count; i++)
+                    {
+                        <div class="@(i==0 ? "carousel-item active" : "carousel-item")">
+                            <img src="@Model.ImagesUrls[i].URL" class="d-block w-100" alt="@Model.Name">
+                        </div>
+                    }
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

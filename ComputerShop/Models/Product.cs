@@ -28,5 +28,9 @@ namespace ComputerShop.Models
 		[NotMapped]
         public IFormFile CoverImage { get; set; }
         public string? CoverImageUrl { get; set; }
+        [Display(Name = "Product images")]
+        [NotMapped]
+        public IFormFileCollection Images { get; set; }
+		public List<ProductImage>? ImagesUrls { get; set; }
     }
 }

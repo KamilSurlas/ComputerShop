@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using ComputerShop.Data.SD;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Diagnostics;
 
 namespace ComputerShop.Controllers
 {
@@ -49,7 +50,6 @@ namespace ComputerShop.Controllers
             {
                 return NotFound();
             }
-
             return View(product);
         }
 
@@ -66,16 +66,22 @@ namespace ComputerShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Amount,ProducerId,CategoryId,CoverImage")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Amount,ProducerId,CategoryId,CoverImage,Images")] Product product)
         {
             if (ModelState.IsValid)
             {
-                if(product.CoverImage != null)
+                
+                if (product.CoverImage != null)
                 {
-                    string coverImagePath = "products/cover/" + Guid.NewGuid().ToString() + product.CoverImage.FileName;
-                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, coverImagePath);
-                    product.CoverImage.CopyTo(new FileStream(imagePath, FileMode.Create));
-                    product.CoverImageUrl = "/"+coverImagePath;
+                    product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
+                }
+                if (product.Images != null)
+                {
+                    product.ImagesUrls = new List<ProductImage>();
+                    foreach (var item in product.Images)
+                    {
+                        product.ImagesUrls.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                    }
                 }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
@@ -84,6 +90,14 @@ namespace ComputerShop.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "Id", "Name", product.ProducerId);
             return View(product);
+        }
+
+        private string AddImage(string folderPath, IFormFile image)
+        {
+            folderPath += Guid.NewGuid().ToString() + image.FileName;
+            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+            image.CopyTo(new FileStream(imagePath, FileMode.Create));
+            return "/" + folderPath;
         }
 
         // GET: Products/Edit/5

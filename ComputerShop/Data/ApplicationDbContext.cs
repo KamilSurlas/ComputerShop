@@ -18,6 +18,7 @@ namespace ComputerShop.Data
 		public DbSet<Status> Statuses { get; set; }
 		public DbSet<ApplicationUser> Users { get; set; }
 		public DbSet<CategoryGroup> CategoryGroups { get; set; }
+		public DbSet<ProductImage> ProductImages { get; set; }
 		
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
