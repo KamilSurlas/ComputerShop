@@ -187,7 +187,21 @@ namespace ComputerShop.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
+                if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + product.CoverImageUrl))
+                {
+                    System.IO.File.Delete(_webHostEnvironment.WebRootPath + product.CoverImageUrl);
+                }                            
                 _context.Products.Remove(product);
+                var images = _context.ProductImages.Where(x => x.ProductId == id);
+                if (images.Any())
+                {
+                    foreach (var item in images)
+                    {
+                        System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                        _context.ProductImages.Remove(item);
+                    }
+                }
+                
             }
             
             await _context.SaveChangesAsync();
