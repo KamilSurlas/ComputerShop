@@ -12,6 +12,7 @@ using System.Data;
 using ComputerShop.Data.SD;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis;
 
 namespace ComputerShop.Controllers
 {
@@ -77,10 +78,10 @@ namespace ComputerShop.Controllers
                 }
                 if (product.Images != null)
                 {
-                    product.ImagesUrls = new List<ProductImage>();
+                    product.productImages = new List<ProductImage>();
                     foreach (var item in product.Images)
                     {
-                        product.ImagesUrls.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                        product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
                     }
                 }
                 _context.Add(product);
@@ -96,7 +97,10 @@ namespace ComputerShop.Controllers
         {
             folderPath += Guid.NewGuid().ToString() + image.FileName;
             string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-            image.CopyTo(new FileStream(imagePath, FileMode.Create));
+            using (FileStream imageToCopy = new(imagePath, FileMode.Create))
+            {
+                image.CopyTo(imageToCopy);
+            }
             return "/" + folderPath;
         }
 
@@ -123,7 +127,7 @@ namespace ComputerShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Amount,ProducerId,CategoryId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Amount,ProducerId,CategoryId,CoverImage,Images")] Product product)
         {
             if (id != product.Id)
             {
@@ -134,7 +138,34 @@ namespace ComputerShop.Controllers
             {
                 try
                 {
+                    var oldProductCover = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).First();
+                    if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + oldProductCover))
+                    {
+                        System.IO.File.Delete(_webHostEnvironment.WebRootPath + oldProductCover);
+                    }
+                    var images = _context.ProductImages.Where(x => x.ProductId == id);
+                    if (images.Any())
+                    {                      
+                        foreach (var item in images)
+                        {
+                            System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                            _context.ProductImages.Remove(item);
+                        }
+                    }
+                    if (product.CoverImage != null)
+                    {
+                        product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
+                    }
+                    if (product.Images != null)
+                    {
+                        product.productImages = new List<ProductImage>();
+                        foreach (var item in product.Images)
+                        {
+                            product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                        }
+                    }
                     _context.Update(product);
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -189,6 +220,7 @@ namespace ComputerShop.Controllers
             {
                 if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + product.CoverImageUrl))
                 {
+          
                     System.IO.File.Delete(_webHostEnvironment.WebRootPath + product.CoverImageUrl);
                 }                            
                 _context.Products.Remove(product);

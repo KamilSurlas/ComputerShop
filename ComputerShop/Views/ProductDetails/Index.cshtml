@@ -36,10 +36,10 @@
         <div class="col-md-5">
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
-                    @for (int i = 0; i < Model.ImagesUrls.Count; i++)
+                    @for (int i = 0; i < Model.productImages.Count; i++)
                     {
                         <div class="@(i==0 ? "carousel-item active" : "carousel-item")">
-                            <img src="@Model.ImagesUrls[i].URL" class="d-block w-100" alt="@Model.Name">
+                            <img src="@Model.productImages[i].URL" class="d-block w-100" alt="@Model.Name">
                         </div>
                     }
                 </div>

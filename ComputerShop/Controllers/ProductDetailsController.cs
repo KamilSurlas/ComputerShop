@@ -15,7 +15,7 @@ namespace ComputerShop.Controllers
         }
         public IActionResult Index(int productId)
         {
-            var product = _context.Products.Include(x => x.Producer).Where(x => x.Id == productId).Include(x=>x.ImagesUrls).Where(x=>x.Id == productId).FirstOrDefault();     
+            var product = _context.Products.Include(x => x.Producer).Where(x => x.Id == productId).Include(x=>x.productImages).Where(x=>x.Id == productId).FirstOrDefault();     
             return View(product);
         }
     }
