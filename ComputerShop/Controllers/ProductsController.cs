@@ -148,7 +148,10 @@ namespace ComputerShop.Controllers
                     {                      
                         foreach (var item in images)
                         {
-                            System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                            if (System.IO.File.Exists(_webHostEnvironment + item.URL))
+                            {
+                                System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                            }
                             _context.ProductImages.Remove(item);
                         }
                     }
@@ -229,7 +232,10 @@ namespace ComputerShop.Controllers
                 {
                     foreach (var item in images)
                     {
-                        System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                        if (System.IO.File.Exists(_webHostEnvironment + item.URL))
+                        {
+                            System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                        }
                         _context.ProductImages.Remove(item);
                     }
                 }
