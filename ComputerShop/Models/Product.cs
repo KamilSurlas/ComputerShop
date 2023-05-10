@@ -26,11 +26,11 @@ namespace ComputerShop.Models
 		public Category Category { get; set; }
         [Display(Name = "Cover image")]
 		[NotMapped]
-        public IFormFile CoverImage { get; set; }
+        public IFormFile? CoverImage { get; set; }
         public string? CoverImageUrl { get; set; }
         [Display(Name = "Product images")]
         [NotMapped]
-        public IFormFileCollection Images { get; set; }
+        public IFormFileCollection? Images { get; set; }
 		public List<ProductImage>? productImages { get; set; }
     }
 }

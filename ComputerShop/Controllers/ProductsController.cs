@@ -103,6 +103,20 @@ namespace ComputerShop.Controllers
             }
             return "/" + folderPath;
         }
+        private IFormFile? DowloadImage(string path) // Ta funkcja jest nie używana ale zostawiam ją jakby się kiedyś miała przydać 
+        {
+            Debug.WriteLine(path);
+            path = _webHostEnvironment.WebRootPath + path;
+            using (FileStream imageToDowload = new(path, FileMode.Open))
+            {
+                FormFile file = new FormFile(imageToDowload, 0, imageToDowload.Length,"", imageToDowload.Name);
+                if (System.IO.File.Exists(file.FileName))
+                {
+                    return file;
+                }
+            }
+            return null;
+        }
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -113,9 +127,11 @@ namespace ComputerShop.Controllers
             }
 
             var product = await _context.Products.FindAsync(id);
+            
             if (product == null)
             {
                 return NotFound();
+
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "Id", "Name", product.ProducerId);
@@ -138,34 +154,53 @@ namespace ComputerShop.Controllers
             {
                 try
                 {
-                    var oldProductCover = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).First();
-                    if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + oldProductCover))
+                    if(product.CoverImage == null)
                     {
-                        System.IO.File.Delete(_webHostEnvironment.WebRootPath + oldProductCover);
+                        product.CoverImageUrl = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).FirstOrDefault();
+                    }
+                    else
+                    {
+                        var oldProductCover = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).First();
+                        if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + oldProductCover))
+                        {
+                            System.IO.File.Delete(_webHostEnvironment.WebRootPath + oldProductCover);
+                        }                      
+                            product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
+                      
                     }
                     var images = _context.ProductImages.Where(x => x.ProductId == id);
-                    if (images.Any())
-                    {                      
-                        foreach (var item in images)
+                    if (product.Images == null)
+                    {
+                        if (images.Any())
                         {
-                            if (System.IO.File.Exists(_webHostEnvironment + item.URL))
+                            product.productImages = new List<ProductImage>();
+                            foreach (var item in images)
                             {
-                                System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                                product.productImages.Add(new ProductImage() { URL = item.URL, ProductId = item.ProductId });
                             }
-                            _context.ProductImages.Remove(item);
                         }
                     }
-                    if (product.CoverImage != null)
+                    else
                     {
-                        product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
-                    }
-                    if (product.Images != null)
-                    {
-                        product.productImages = new List<ProductImage>();
-                        foreach (var item in product.Images)
+                        if (images.Any())
                         {
-                            product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                            foreach (var item in images)
+                            {
+                                if (System.IO.File.Exists(_webHostEnvironment + item.URL))
+                                {
+                                    System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
+                                }
+                                _context.ProductImages.Remove(item);
+                            }
                         }
+
+                       
+                            product.productImages = new List<ProductImage>();
+                            foreach (var item in product.Images)
+                            {
+                                product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                            }
+                        
                     }
                     _context.Update(product);
                     
