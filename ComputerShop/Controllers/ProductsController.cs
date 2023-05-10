@@ -156,52 +156,40 @@ namespace ComputerShop.Controllers
                 {
                     if(product.CoverImage == null)
                     {
-                        product.CoverImageUrl = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).FirstOrDefault();
+                        product.CoverImageUrl = _context.Products.AsNoTracking().Where(x=>x.Id == id).Select(x=>x.CoverImageUrl).FirstOrDefault();
                     }
-                    else
+                    if(product.CoverImage != null)
                     {
                         var oldProductCover = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).First();
                         if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + oldProductCover))
                         {
                             System.IO.File.Delete(_webHostEnvironment.WebRootPath + oldProductCover);
-                        }                      
-                            product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
-                      
-                    }
-                    var images = _context.ProductImages.Where(x => x.ProductId == id);
-                    if (product.Images == null)
-                    {
-                        if (images.Any())
-                        {
-                            product.productImages = new List<ProductImage>();
-                            foreach (var item in images)
-                            {
-                                product.productImages.Add(new ProductImage() { URL = item.URL, ProductId = item.ProductId });
-                            }
                         }
+                        product.CoverImageUrl = AddImage("products/cover/", product.CoverImage);
                     }
-                    else
+                   if(product.Images != null)
                     {
+                        var images = _context.ProductImages.Where(x => x.ProductId == id);
                         if (images.Any())
                         {
                             foreach (var item in images)
                             {
-                                if (System.IO.File.Exists(_webHostEnvironment + item.URL))
+                                if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + item.URL))
                                 {
                                     System.IO.File.Delete(_webHostEnvironment.WebRootPath + item.URL);
                                 }
                                 _context.ProductImages.Remove(item);
                             }
                         }
-
-                       
-                            product.productImages = new List<ProductImage>();
-                            foreach (var item in product.Images)
-                            {
-                                product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
-                            }
-                        
+                        product.productImages = new List<ProductImage>();
+                        foreach (var item in product.Images)
+                        {
+                            product.productImages.Add(new ProductImage() { URL = AddImage("products/gallery/", item), ProductId = product.Id });
+                        }
                     }
+                        
+                      
+                 
                     _context.Update(product);
                     
                     await _context.SaveChangesAsync();
