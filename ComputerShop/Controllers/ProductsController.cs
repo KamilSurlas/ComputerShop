@@ -158,7 +158,7 @@ namespace ComputerShop.Controllers
                     {
                         product.CoverImageUrl = _context.Products.AsNoTracking().Where(x=>x.Id == id).Select(x=>x.CoverImageUrl).FirstOrDefault();
                     }
-                    if(product.CoverImage != null)
+                    else
                     {
                         var oldProductCover = _context.Products.AsNoTracking().Where(x => x.Id == id).Select(x => x.CoverImageUrl).First();
                         if (System.IO.File.Exists(_webHostEnvironment.WebRootPath + oldProductCover))
