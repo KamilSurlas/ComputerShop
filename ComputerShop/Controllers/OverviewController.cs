@@ -15,7 +15,7 @@ namespace ComputerShop.Controllers
         {
             _context = context;
         }
-        public IActionResult Index(int? dataId)
+        public IActionResult Index(int dataId)
         {           
             var searchingText = HttpContext.Request.Query["searchingText"];
             OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
