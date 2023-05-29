@@ -32,5 +32,8 @@ namespace ComputerShop.Models
         [NotMapped]
         public IFormFileCollection? Images { get; set; }
 		public List<ProductImage>? productImages { get; set; }
-    }
+
+		[Display(Name = "Description")]
+		public string Description { get; set; }
+	}
 }
