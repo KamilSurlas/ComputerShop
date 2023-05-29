@@ -19,11 +19,7 @@ namespace ComputerShop.Controllers
         {           
             var searchingText = HttpContext.Request.Query["searchingText"];
             OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
-            List<Models.Product> productsToShow;
-            if(string.IsNullOrEmpty(searchingText) && dataId == null)
-            {
-                return View(@"Views/Home/Index.cshtml", null);
-            }
+            List<Models.Product> productsToShow;        
             if (!string.IsNullOrEmpty(searchingText))
             {
                 productsToShow = _context.Products.Include(x => x.Producer).Where(x => x.Name.Contains(searchingText)).ToList();
