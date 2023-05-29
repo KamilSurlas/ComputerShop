@@ -12,6 +12,7 @@
 
 appsettings.json
 Migrations/
+wwwroot/products/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
