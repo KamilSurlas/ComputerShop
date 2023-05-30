@@ -18,9 +18,30 @@
 
 <div class="cointainer">
     <div class="row">
+        <div class="col-sm-2">          
+            <form method="get">
+                <ul class="list-group">
+                   @foreach (var item in Model.Producents)
+                    {
+                        <li class="list-group-item">
+                        <input class="form-check-input me-1"type="checkbox" name="producer" value="@item" aria-label="...">@item
+                        </li>
+                    }
+                </ul>
+                <label for="MinCena">Cena minimalna</label>
+                <input type="number" min="1" name="minCena" class="form-control" />
+                <small class="form-text text-muted">Cena musi być większa od 0</small>
+                <label for="MaxCena">Cena maksymalna</label>
+                <input type="number" name="maxCena" class="form-control" />
+                <input type="hidden" name="dataId" value="@ViewData["dataId"]" />
+                <button class="btn btn-outline-warning" type="submit" asp-controller="Overview" asp-action="FilterProducts">Zastosuj filtry</button>
+            </form>
+        </div>
+        <div class="col-sm-10"> 
+            <div class="row">
         @foreach (var item in Model.PromotedProducts)
         {
-            <a class="col-sm-6 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+            <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
                 <div class="product">
                     <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
                     <h4>@item.Name</h4>
@@ -30,7 +51,7 @@
         }
         @foreach (var item in Model.Products)
         {
-            <a class="col-sm-6 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+            <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
                 <div class="product">
                     <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
                     <h4>@item.Name</h4>
@@ -38,6 +59,8 @@
                 </div>
             </a>
         }
+            </div>
+        </div>
     </div>
 </div>
 
