@@ -26,14 +26,14 @@
                         @if (User.IsInRole(SD.Role_User_Admin))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Manage Content</a>
+                                <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Zarządzaj</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-controller="CategoryGroups" asp-action="Index">Category groups</a>
-                                    <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Categories</a>
-                                    <a class="dropdown-item" asp-controller="Products" asp-action="Index">Products</a>
-                                    <a class="dropdown-item" asp-controller="Producers" asp-action="Index">Producers</a>
+                                    <a class="dropdown-item" asp-controller="CategoryGroups" asp-action="Index">Kategorie</a>
+                                    <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Podkategorie</a>
+                                    <a class="dropdown-item" asp-controller="Products" asp-action="Index">Produkty</a>
+                                    <a class="dropdown-item" asp-controller="Producers" asp-action="Index">Producenci</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Users</a>
+                                    <a class="dropdown-item" href="#">Użytkownicy</a>
                                 </div>
                             </li>
                         }
