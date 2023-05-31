@@ -51,6 +51,26 @@ namespace ComputerShop.Controllers
             overviewPageViewModel.Producents =  overviewPageViewModel.Producents.Distinct().ToList();
             return View(overviewPageViewModel);
             
+        }     
+        public IActionResult Search()
+        {
+            var searchingText = HttpContext.Request.Query["searchingText"];
+            OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
+            List<Models.Product> productsToShow = _context.Products.Include(x => x.Producer).Where(x => x.Name.Contains(searchingText)).ToList();
+
+            foreach (var item in productsToShow)
+            {
+                if (item.Producer.IsPromoted == true)
+                {
+                    overviewPageViewModel.PromotedProducts.Add(item);
+                }
+                else
+                {
+                    overviewPageViewModel.Products.Add(item);
+                }
+              
+            }
+            return View("Index",overviewPageViewModel);
         }
         [HttpGet]
         public IActionResult FilterProducts(List<string>producer, int? minCena, int? maxCena, int dataId)
