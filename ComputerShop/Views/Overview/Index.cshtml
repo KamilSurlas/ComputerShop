@@ -4,15 +4,15 @@
 }
 <style>
     .product h4 {
-        text-align:center;
+    text-align:center;
     }
 
     .product h5 {
-        text-align: center;
+    text-align: center;
     }
     .imgSize {
-        width: 15rem;
-        height: 15rem;
+    width: 15rem;
+    height: 15rem;
     }
 </style>
 
@@ -21,10 +21,10 @@
         <div class="col-sm-2">          
             <form method="get">
                 <ul class="list-group">
-                   @foreach (var item in Model.Producents)
+                    @foreach (var item in Model.Producents)
                     {
                         <li class="list-group-item">
-                        <input class="form-check-input me-1"type="checkbox" name="producer" value="@item" aria-label="...">@item
+                            <input class="form-check-input me-1"type="checkbox" name="producer" value="@item" aria-label="...">@item
                         </li>
                     }
                 </ul>
@@ -34,33 +34,43 @@
                 <label for="MaxCena">Cena maksymalna</label>
                 <input type="number" name="maxCena" class="form-control" />
                 <input type="hidden" name="dataId" value="@ViewData["dataId"]" />
-                <button class="btn btn-outline-warning" type="submit" asp-controller="Overview" asp-action="FilterProducts">Zastosuj filtry</button>
+                <button class="btn btn-outline-warning" type="submit" asp-controller="Overview" asp-action="FilterProducts">Zastosuj filtry</button>          
+            </form>
+            <form method="post">
+                <button class="btn btn-outline-warning" type="submit" asp-route-dataId="@ViewData["dataId"]" asp-controller="Overview" asp-action="Index">Wyczyść filtry</button>
             </form>
         </div>
-        <div class="col-sm-10"> 
-            <div class="row">
-        @foreach (var item in Model.PromotedProducts)
-        {
-            <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
-                <div class="product">
-                    <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
-                    <h4>@item.Name</h4>
-                    <h5>Cena: @item.Price zł</h5>
-                </div>
-            </a>
-        }
-        @foreach (var item in Model.Products)
-        {
-            <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
-                <div class="product">
-                    <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
-                    <h4>@item.Name</h4>
-                    <h5>Cena: @item.Price zł</h5>
-                </div>
-            </a>
-        }
+            <div class="col-sm-10"> 
+                    <div class="row">
+                @if (Model.PromotedProducts.Count > 0 || Model.Products.Count > 0)
+                {
+                    @foreach (var item in Model.PromotedProducts)
+                    {
+                        <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+                            <div class="product">
+                                <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
+                                <h4>@item.Name</h4>
+                                <h5>Cena: @item.Price zł</h5>
+                            </div>
+                        </a>
+                    }
+                    @foreach (var item in Model.Products)
+                    {
+                        <a class="col-sm-5 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+                            <div class="product">
+                                <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
+                                <h4>@item.Name</h4>
+                                <h5>Cena: @item.Price zł</h5>
+                            </div>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <p>Nie znaleziono produktów spełniających kryteria wyszukiwania. Zmień podane kryteria lub usuń filtry aby zobaczyc produkty.</p>
+                }
             </div>
-        </div>
+            </div>     
     </div>
 </div>
 

@@ -20,7 +20,7 @@ namespace ComputerShop.Controllers
         }
         public IActionResult Index(int dataId)
         {
-            ViewData["DataId"] = dataId;
+            ViewData["dataId"] = dataId;
             var searchingText = HttpContext.Request.Query["searchingText"];
             OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
             List<Models.Product> productsToShow;        
@@ -55,7 +55,7 @@ namespace ComputerShop.Controllers
         [HttpGet]
         public IActionResult FilterProducts(List<string>producer, int? minCena, int? maxCena, int dataId)
         {
-            ViewData["DataId"] = dataId;
+            ViewData["dataId"] = dataId;
             List<Models.Product> productsToShow = _context.Products.Include(x => x.Producer).Where(x=>x.CategoryId==dataId).ToList();
             if (producer.Count > 0)
             {
@@ -70,6 +70,9 @@ namespace ComputerShop.Controllers
                 productsToShow = productsToShow.Where(x => x.Price <= maxCena).ToList();
 
             }         
+            if(minCena != null && maxCena != null && minCena > maxCena) {
+               productsToShow= _context.Products.Include(x => x.Producer).Where(x => x.CategoryId == dataId).ToList();
+            }
             OverviewPageViewModel overviewPageViewModel = new OverviewPageViewModel();
             foreach (var item in productsToShow)
             {
