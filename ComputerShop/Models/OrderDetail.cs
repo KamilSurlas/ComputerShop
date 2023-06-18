@@ -15,7 +15,7 @@ namespace ComputerShop.Models
 		[ForeignKey("OrderId")]
 		[ValidateNever]
 		public Order Order { get; set; }
-
+		public double Price { get; set; }
         [Display(Name = "Product")]
         public int ProductId { get; set; }
 		[ForeignKey("ProductId")]
