@@ -31,6 +31,7 @@ namespace ComputerShop.Models
         [Display(Name = "Product images")]
         [NotMapped]
         public IFormFileCollection? Images { get; set; }
+		[ValidateNever]
 		public List<ProductImage>? productImages { get; set; }
 
 		[Display(Name = "Description")]

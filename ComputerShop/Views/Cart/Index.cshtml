@@ -26,11 +26,7 @@
                     {
                         <div class="row border-bottom pb-3">
                             <div class="d-none d-lg-block col-lg-1 text-center py-2">
-                                @if (item.Product.productImages != null && item.Product.productImages.Count() > 0)
-                                {
-                                    <img src="@item.Product.productImages.FirstOrDefault()" class="card-img-top rounded w-100" />
-                                }
-                                else if(item.Product.CoverImageUrl != null)
+                                @if(item.Product.CoverImageUrl != null)
                                 {
                                     <img src="@item.Product.CoverImageUrl" class="card-img-top rounded w-100" />
                                 }
@@ -92,5 +88,6 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 </form>

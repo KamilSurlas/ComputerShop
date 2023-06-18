@@ -33,41 +33,55 @@
 
 <div class="container">
     <form method="post" asp-action="AddToCart" enctype="multipart/form-data">
-    <input hidden asp-for="@Model.ProductId" />
+        <input hidden asp-for="ProductId" />
     <div class="row">
-        <div class="col-md-5">
-            <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    @for (int i = 0; i < Model.Product.productImages.Count; i++)
-                    {
-                        <div class="@(i==0 ? "carousel-item active" : "carousel-item")">
-                            <img src="@Model.Product.productImages[i].URL" class="d-block w-100" alt="@Model.Product.Name">
+            <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
+                @if (Model.Product.productImages != null && Model.Product.productImages.Count > 0)
+                {
+                    <div id="carouselExampleIndicators" class="carousel  slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+
+                            @foreach (var imageWithIndex in
+                           Model.Product.productImages
+                           .Select((image, index) => new { Image = image, Index = index }))
+                            {
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@imageWithIndex.Index"
+                                        class="@(imageWithIndex.Index==0?"active":"")" aria-current="true" aria-label="Slide 1"></button>
+                            }
+
+
                         </div>
-                    }
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                        <div class="carousel-inner">
+                            @foreach (var imageWithIndex in
+                           Model.Product.productImages
+                           .Select((image, index) => new { Image = image, Index = index }))
+                            {
+                                <div class="@(imageWithIndex.Index==0?"carousel-item active":"carousel-item")">
+                                    <img src="@imageWithIndex.Image.URL" class="d-block w-100" alt="...">
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                }
             </div>
-        </div>
-        <div class="col-md-7">
-            <h2>@Model.Product.Name</h2>
-            <p>Kod produktu: @Model.Product.Id</p>
-            <p class="price text-warning">Cena: @Model.Product.Price zł</p>
-            <label>Ilość:</label>
-            <input type="text" value="1">
-            <button type="button" class="btn btn-default cart bg-warning text-dark">Dodaj do koszyka</button>
-            <p class="marka"><b>Marka: </b>@Model.Producer.Name</p>
-            <p><b>Ilosc sztuk na stanie: </b>@Model.Amount</p>
-            <p><b>Opis: </b>@Model.Description</p>
-        </div>
-    </div>
+            <div class="col-md-7">
+                <h2>@Model.Product.Name</h2>
+                <p>Kod produktu: @Model.Product.Id</p>
+                <p class="price text-warning">Cena: @Model.Product.Price zł</p>
+                <label>Ilość:</label>
+                <input type="number" value="1" min="1" max="@Model.Product.Amount" asp-for="@Model.Count" />
+                <button type="submit" class="btn btn-default cart bg-warning text-dark">Dodaj do koszyka</button>
+                <p><b>Ilosc sztuk na stanie: </b>@Model.Product.Amount</p>
+                <p><b>Opis: </b>@Model.Product.Description</p>
+            </div>
+            </div>
+    </form>
 </div>
-
-
-

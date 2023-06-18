@@ -22,8 +22,8 @@ namespace ComputerShop.Controllers
             //zmienic na shoppingcart -> dodac formularz w index
             ShoppingCart cart = new ShoppingCart()
             {
-                Product = _context.Products.Include(x => x.Producer).Where(x => x.Id == productId)
-                .Include(x => x.productImages).Where(x => x.Id == productId).FirstOrDefault(),
+                Product = _context.Products.Include(x => x.Producer).Where(x => x.Id == productId).Where(x => x.Id == productId)
+                .Include(x => x.productImages).FirstOrDefault(),
                 ProductId = productId,
                 Count = 1
             };
@@ -32,8 +32,8 @@ namespace ComputerShop.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(ShoppingCart shoppingCart)
         {
             var cl = (ClaimsIdentity)User.Identity;
