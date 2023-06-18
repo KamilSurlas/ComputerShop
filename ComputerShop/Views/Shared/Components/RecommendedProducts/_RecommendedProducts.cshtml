@@ -1,0 +1,16 @@
+﻿@model List<Product>
+
+<div class="cointainer">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <a class="col-sm-6 col-md-4 col-xl-3 link-dark" asp-route-productId="@item.Id" asp-controller="ProductDetails" asp-action="Index">
+                <div class="product">
+                    <img class="imgSize" src="@item.CoverImageUrl" alt="@item.Name - zdj">
+                    <h4>@item.Name</h4>
+                    <h5>Cena: @item.Price zł</h5>
+                </div>
+            </a>
+        }
+    </div>
+</div>
