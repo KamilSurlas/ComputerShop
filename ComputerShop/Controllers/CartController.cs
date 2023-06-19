@@ -107,7 +107,7 @@ namespace ComputerShop.Controllers
 				CartViewModel.Order.Price += cart.Price;
 			}
 
-            CartViewModel.Order.Status = StatusMessages.Shipping;
+            CartViewModel.Order.Status = _context.Statuses.FirstOrDefault(x => x.Name == StatusMessages.Shipping);
 
             _context.Orders.Add(CartViewModel.Order);
             _context.SaveChanges();

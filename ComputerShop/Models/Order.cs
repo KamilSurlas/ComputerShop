@@ -13,7 +13,7 @@ namespace ComputerShop.Models
 		[Display(Name = "Status")]
 		public int StatusId { get; set; }
         [ForeignKey("StatusId")]
-		public string Status { get; set; }
+		public Status? Status { get; set; }
 
         [ForeignKey("ApplicationUserId")]
         public string ApplicationUserId { get; set; }

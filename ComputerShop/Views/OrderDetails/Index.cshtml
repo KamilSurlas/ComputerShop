@@ -34,7 +34,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Order.Status</td>
+                        <td class="text-danger fw-bold">@item.Order.Status.Name</td>
                         <td>@item.Order.OrderDate</td>
                         <td>@item.Product.Name</td>
                         <td>@item.Quantity</td>
@@ -47,6 +47,13 @@
                         <td>@item.Order.Region</td>
                         <td>@item.Order.Country</td>
                         <td>@item.Order.PhoneNumber</td>
+                        <td>
+                            <div class="col-6 text-end">
+                                <a asp-controller="OrderDetails" asp-action="EditOrderStatus" asp-route-orderId="@item.Order.Id" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i>  Edit Order Status
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
