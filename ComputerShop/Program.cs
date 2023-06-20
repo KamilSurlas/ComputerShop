@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using ComputerShop.Data.SD;
 using ComputerShop.Utility;
 using Stripe;
+using ComputerShop.DbConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -48,6 +50,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+InitDb();
 
 app.MapRazorPages();
 app.MapControllerRoute(
@@ -55,3 +58,12 @@ app.MapControllerRoute(
 	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void InitDb()
+{
+	using (var scope = app.Services.CreateScope())
+	{
+		var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+		dbInitializer.Initialize();
+	}
+}
