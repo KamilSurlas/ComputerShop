@@ -105,32 +105,29 @@ namespace ComputerShop.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-
-            public string? Role { get; set; }
-            [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList { get; set; }
-
-        }
+			[Required]
+			public string Name { get; set; }
+			[Required]
+			public string LastName { get; set; }
+			[Required]
+			public string City { get; set; }
+			[Required]
+            [Display(Name = "Street Address")]
+			public string StreetAddress { get; set; }
+			[Required]
+			public string Region { get; set; }
+			[Required]
+			public string PostalCode { get; set; }
+            [Required]
+            public string Country { get; set; }
+			[Required]
+            [Display(Name = "Phone Number")]
+			public string PhoneNumber { get; set; }
+		}
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-
-			if (!_roleManager.RoleExistsAsync(SD.Role_User_Admin).GetAwaiter().GetResult())
-			{
-				_roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin)).GetAwaiter().GetResult();
-				_roleManager.CreateAsync(new IdentityRole(SD.Role_User_Customer)).GetAwaiter().GetResult();
-			}
-
-            Input = new InputModel()
-            {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-                {
-                    Value = i,
-                    Text = i
-                })
-            };
-
 			ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -145,21 +142,21 @@ namespace ComputerShop.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.Name = Input.Name;
+                user.LastName = Input.LastName;
+                user.City = Input.City;
+                user.StreetAddress = Input.StreetAddress;
+                user.Region = Input.Region;
+                user.PostalCode = Input.PostalCode;
+                user.Country = Input.Country;
+                user.PhoneNumber = Input.PhoneNumber;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
-
-                    if (!String.IsNullOrEmpty(Input.Role))
-                    {
-						await _userManager.AddToRoleAsync(user, Input.Role);
-					}
-                    else
-                    {
-						await _userManager.AddToRoleAsync(user, SD.Role_User_Customer);
-					}
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
